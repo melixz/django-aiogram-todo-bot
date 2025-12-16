@@ -29,19 +29,19 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.development
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-dev-key}
-      - DJANGO_DEBUG=True
-      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,backend
-      - POSTGRES_DB=todo_db
-      - POSTGRES_USER=todo_user
-      - POSTGRES_PASSWORD=todo_password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    environment: &backend-env
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-insecure-dev-key}
+      DJANGO_DEBUG: "True"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: todo_user
+      POSTGRES_PASSWORD: todo_password
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
     ports:
       - "8000:8000"
     depends_on:
@@ -57,17 +57,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     command: celery -A config worker -l INFO
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.development
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-dev-key}
-      - POSTGRES_DB=todo_db
-      - POSTGRES_USER=todo_user
-      - POSTGRES_PASSWORD=todo_password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    environment: *backend-env
     depends_on:
       postgres:
         condition: service_healthy
@@ -83,17 +73,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.development
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-dev-key}
-      - POSTGRES_DB=todo_db
-      - POSTGRES_USER=todo_user
-      - POSTGRES_PASSWORD=todo_password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    environment: *backend-env
     depends_on:
       postgres:
         condition: service_healthy
@@ -109,8 +89,8 @@ services:
       context: ./bot
       dockerfile: Dockerfile
     environment:
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-      - API_BASE_URL=http://backend:8000/api/v1
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      API_BASE_URL: http://backend:8000/api/v1
     depends_on:
       - backend
     volumes:
@@ -118,4 +98,3 @@ services:
 
 volumes:
   postgres_data:
-

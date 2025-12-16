@@ -1,7 +1,6 @@
-from django.db import models
-
 from categories.models import Category
 from core.models import BaseModel
+from django.db import models
 
 
 class Task(BaseModel):
