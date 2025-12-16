@@ -1,0 +1,17 @@
+[project]
+name = "django-aiogram-todo-bot"
+version = "0.1.0"
+description = "ToDo List service with Django backend and Telegram bot"
+requires-python = ">=3.13"
+dependencies = []
+
+[tool.uv.workspace]
+members = ["backend", "bot"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["E501"]

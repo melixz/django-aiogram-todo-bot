@@ -1,0 +1,23 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Django backend for ToDo List service"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.1",
+    "djangorestframework>=3.15",
+    "django-ulid>=0.0.4",
+    "python-ulid>=3.0.0",
+    "celery>=5.4",
+    "redis>=5.2",
+    "django-celery-beat>=2.7",
+    "psycopg[binary]>=3.2",
+    "httpx>=0.28",
+    "django-cors-headers>=4.6",
+    "gunicorn>=23.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
