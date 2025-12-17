@@ -66,7 +66,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
 
 class TaskListSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source="category.name", read_only=True)
+    category_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -78,3 +78,6 @@ class TaskListSerializer(serializers.ModelSerializer):
             "is_completed",
             "created_at",
         ]
+
+    def get_category_name(self, obj):
+        return obj.category.name if obj.category else None

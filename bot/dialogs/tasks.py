@@ -25,9 +25,8 @@ async def get_tasks_data(dialog_manager: DialogManager, **kwargs) -> dict[str, A
 
     try:
         tasks = await client.get_tasks()
-        tasks.sort(
-            key=lambda x: (x.get("is_completed", False), x.get("created_at", "")), reverse=False
-        )
+        tasks.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+        tasks.sort(key=lambda x: x.get("is_completed", False), reverse=False)
         tasks = tasks[:10]
     except Exception as e:
         tasks = []

@@ -26,6 +26,3 @@ class Command(BaseCommand):
                 f"Login at: http://localhost:8000/admin/"
             )
         )
-
-
-
