@@ -8,6 +8,9 @@ if [ "$1" = 'gunicorn' ]; then
     
     echo "Collecting static files..."
     python manage.py collectstatic --noinput
+    
+    echo "Creating admin user..."
+    python manage.py createadmin || true
 fi
 
 exec "$@"
